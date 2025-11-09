@@ -1,6 +1,6 @@
 # Development Tools
 
-Pydock includes several development tools to enhance your Python development workflow.
+PyDock includes several development tools to enhance your Python development workflow.
 
 ## Jupyter Notebook
 

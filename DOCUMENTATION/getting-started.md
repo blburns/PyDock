@@ -1,6 +1,6 @@
-# Getting Started with Pydock
+# Getting Started with PyDock
 
-This guide will help you get started with Pydock.
+This guide will help you get started with PyDock.
 
 ## Prerequisites
 

@@ -1,6 +1,6 @@
 # Web Servers
 
-Pydock includes Nginx as a reverse proxy and web server.
+PyDock includes Nginx as a reverse proxy and web server.
 
 ## Nginx
 

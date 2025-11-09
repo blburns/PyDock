@@ -3,7 +3,7 @@ ARG FLASK_VERSION=latest
 
 FROM python:${PYTHON_VERSION}-slim
 
-LABEL maintainer="Pydock Contributors"
+LABEL maintainer="PyDock Contributors"
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \

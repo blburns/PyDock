@@ -1,6 +1,6 @@
-# Pydock Documentation
+# PyDock Documentation
 
-Welcome to the Pydock documentation! This directory contains detailed documentation for all services and features.
+Welcome to the PyDock documentation! This directory contains detailed documentation for all services and features.
 
 ## Table of Contents
 

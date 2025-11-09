@@ -1,6 +1,6 @@
 # Task Queues
 
-Pydock includes Celery and RabbitMQ for asynchronous task processing.
+PyDock includes Celery and RabbitMQ for asynchronous task processing.
 
 ## Celery
 

@@ -2,7 +2,7 @@ ARG PYTHON_VERSION=3.11
 
 FROM python:${PYTHON_VERSION}-slim
 
-LABEL maintainer="Pydock Contributors"
+LABEL maintainer="PyDock Contributors"
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \

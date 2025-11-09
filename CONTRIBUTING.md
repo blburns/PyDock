@@ -1,6 +1,6 @@
-# Contributing to Pydock
+# Contributing to PyDock
 
-Thank you for considering contributing to Pydock! This document provides guidelines and instructions for contributing.
+Thank you for considering contributing to PyDock! This document provides guidelines and instructions for contributing.
 
 ## How to Contribute
 

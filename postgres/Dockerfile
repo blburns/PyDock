@@ -2,7 +2,7 @@ ARG POSTGRES_VERSION=15
 
 FROM postgres:${POSTGRES_VERSION}
 
-LABEL maintainer="Pydock Contributors"
+LABEL maintainer="PyDock Contributors"
 
 # Copy initialization scripts
 COPY ./init /docker-entrypoint-initdb.d/

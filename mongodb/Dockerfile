@@ -2,7 +2,7 @@ ARG MONGODB_VERSION=7.0
 
 FROM mongo:${MONGODB_VERSION}
 
-LABEL maintainer="Pydock Contributors"
+LABEL maintainer="PyDock Contributors"
 
 # Copy initialization scripts
 COPY ./init /docker-entrypoint-initdb.d/

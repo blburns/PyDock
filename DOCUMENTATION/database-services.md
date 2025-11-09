@@ -1,6 +1,6 @@
 # Database Services
 
-Pydock includes pre-configured containers for popular databases.
+PyDock includes pre-configured containers for popular databases.
 
 ## PostgreSQL
 

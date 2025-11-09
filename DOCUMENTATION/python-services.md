@@ -1,6 +1,6 @@
 # Python Services
 
-Pydock provides several Python service containers for different frameworks and use cases.
+PyDock provides several Python service containers for different frameworks and use cases.
 
 ## Workspace
 

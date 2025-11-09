@@ -1,6 +1,6 @@
 FROM nginx:alpine
 
-LABEL maintainer="Pydock Contributors"
+LABEL maintainer="PyDock Contributors"
 
 # Copy custom configuration
 COPY nginx.conf /etc/nginx/nginx.conf

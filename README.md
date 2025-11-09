@@ -1,4 +1,4 @@
-# Pydock
+# PyDock
 
 **Full Python development environment based on Docker.**
 
@@ -6,13 +6,13 @@
 
 #### Use Docker First - Learn About It Later!
 
-Pydock Documentation: [DOCUMENTATION](DOCUMENTATION)
+PyDock Documentation: [DOCUMENTATION](DOCUMENTATION)
 
 ---
 
-## What is Pydock?
+## What is PyDock?
 
-Pydock is a Docker-based Python development environment that provides pre-configured Docker containers for Python development. It's inspired by Laradock but tailored specifically for Python developers.
+PyDock is a Docker-based Python development environment that provides pre-configured Docker containers for Python development. It's inspired by Laradock but tailored specifically for Python developers.
 
 ## Features
 

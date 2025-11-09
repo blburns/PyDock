@@ -1,6 +1,6 @@
 FROM rabbitmq:3-management-alpine
 
-LABEL maintainer="Pydock Contributors"
+LABEL maintainer="PyDock Contributors"
 
 # Enable management plugin
 RUN rabbitmq-plugins enable rabbitmq_management

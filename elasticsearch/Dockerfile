@@ -2,7 +2,7 @@ ARG ELASTICSEARCH_VERSION=8.11.0
 
 FROM docker.elastic.co/elasticsearch/elasticsearch:${ELASTICSEARCH_VERSION}
 
-LABEL maintainer="Pydock Contributors"
+LABEL maintainer="PyDock Contributors"
 
 # Set environment variables
 ENV discovery.type=single-node \
