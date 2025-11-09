@@ -1,0 +1,235 @@
+version: '3.8'
+
+services:
+  # Python Workspace
+  workspace:
+    build:
+      context: ./workspace
+      args:
+        - PYTHON_VERSION=${WORKSPACE_PYTHON_VERSION:-3.11}
+    volumes:
+      - ${APP_CODE_PATH_HOST:-../}:/var/www
+      - workspace-data:/root
+    extra_hosts:
+      - "dockerhost:${DOCKER_HOST_IP:-172.17.0.1}"
+    networks:
+      - pydock-network
+    tty: true
+
+  # Python Application
+  python:
+    build:
+      context: ./python
+      args:
+        - PYTHON_VERSION=${PYTHON_VERSION:-3.11}
+    volumes:
+      - ${APP_CODE_PATH_HOST:-../}:/var/www
+    working_dir: /var/www
+    networks:
+      - pydock-network
+    command: python --version
+
+  # Django
+  django:
+    build:
+      context: ./django
+      args:
+        - PYTHON_VERSION=${PYTHON_VERSION:-3.11}
+        - DJANGO_VERSION=${DJANGO_VERSION:-latest}
+    volumes:
+      - ${APP_CODE_PATH_HOST:-../}:/var/www
+    working_dir: /var/www
+    ports:
+      - "${DJANGO_PORT:-8000}:8000"
+    networks:
+      - pydock-network
+    command: python manage.py runserver 0.0.0.0:8000
+
+  # Flask
+  flask:
+    build:
+      context: ./flask
+      args:
+        - PYTHON_VERSION=${PYTHON_VERSION:-3.11}
+        - FLASK_VERSION=${FLASK_VERSION:-latest}
+    volumes:
+      - ${APP_CODE_PATH_HOST:-../}:/var/www
+    working_dir: /var/www
+    ports:
+      - "${FLASK_PORT:-5000}:5000"
+    networks:
+      - pydock-network
+    command: flask run --host=0.0.0.0 --port=5000
+
+  # FastAPI
+  fastapi:
+    build:
+      context: ./fastapi
+      args:
+        - PYTHON_VERSION=${PYTHON_VERSION:-3.11}
+        - FASTAPI_VERSION=${FASTAPI_VERSION:-latest}
+    volumes:
+      - ${APP_CODE_PATH_HOST:-../}:/var/www
+    working_dir: /var/www
+    ports:
+      - "${FASTAPI_PORT:-8000}:8000"
+    networks:
+      - pydock-network
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  # PostgreSQL
+  postgres:
+    build:
+      context: ./postgres
+      args:
+        - POSTGRES_VERSION=${POSTGRES_VERSION:-15}
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-default}
+      - POSTGRES_USER=${POSTGRES_USER:-default}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-secret}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - pydock-network
+
+  # MySQL
+  mysql:
+    build:
+      context: ./mysql
+      args:
+        - MYSQL_VERSION=${MYSQL_VERSION:-8.0}
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-default}
+      - MYSQL_USER=${MYSQL_USER:-default}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-secret}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - pydock-network
+
+  # MongoDB
+  mongodb:
+    build:
+      context: ./mongodb
+      args:
+        - MONGODB_VERSION=${MONGODB_VERSION:-7.0}
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGODB_USER:-default}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD:-secret}
+      - MONGO_INITDB_DATABASE=${MONGODB_DATABASE:-default}
+    ports:
+      - "${MONGODB_PORT:-27017}:27017"
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - pydock-network
+
+  # Redis
+  redis:
+    build:
+      context: ./redis
+      args:
+        - REDIS_VERSION=${REDIS_VERSION:-7.2}
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - pydock-network
+
+  # Jupyter Notebook
+  jupyter:
+    build:
+      context: ./jupyter
+      args:
+        - PYTHON_VERSION=${PYTHON_VERSION:-3.11}
+    volumes:
+      - ${APP_CODE_PATH_HOST:-../}:/home/jovyan/work
+      - jupyter-data:/home/jovyan
+    ports:
+      - "${JUPYTER_PORT:-8888}:8888"
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      - JUPYTER_TOKEN=${JUPYTER_TOKEN:-your-secret-token}
+    networks:
+      - pydock-network
+
+  # Nginx
+  nginx:
+    build: ./nginx
+    volumes:
+      - ${APP_CODE_PATH_HOST:-../}:/var/www
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "${NGINX_HOST_HTTP_PORT:-80}:80"
+      - "${NGINX_HOST_HTTPS_PORT:-443}:443"
+    networks:
+      - pydock-network
+    depends_on:
+      - python
+
+  # Celery Worker
+  celery:
+    build:
+      context: ./celery
+      args:
+        - PYTHON_VERSION=${PYTHON_VERSION:-3.11}
+    volumes:
+      - ${APP_CODE_PATH_HOST:-../}:/var/www
+    working_dir: /var/www
+    environment:
+      - CELERY_BROKER=${CELERY_BROKER:-redis://redis:6379/0}
+      - CELERY_BACKEND=${CELERY_BACKEND:-redis://redis:6379/0}
+    networks:
+      - pydock-network
+    depends_on:
+      - redis
+
+  # RabbitMQ
+  rabbitmq:
+    build:
+      context: ./rabbitmq
+    ports:
+      - "${RABBITMQ_PORT:-5672}:5672"
+      - "${RABBITMQ_MANAGEMENT_PORT:-15672}:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - pydock-network
+
+  # Elasticsearch
+  elasticsearch:
+    build:
+      context: ./elasticsearch
+      args:
+        - ELASTICSEARCH_VERSION=${ELASTICSEARCH_VERSION:-8.11.0}
+    ports:
+      - "${ELASTICSEARCH_PORT:-9200}:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    networks:
+      - pydock-network
+
+volumes:
+  workspace-data:
+  postgres-data:
+  mysql-data:
+  mongodb-data:
+  redis-data:
+  jupyter-data:
+  rabbitmq-data:
+  elasticsearch-data:
+
+networks:
+  pydock-network:
+    driver: bridge
+
